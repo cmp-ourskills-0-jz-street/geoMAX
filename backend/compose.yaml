@@ -3,7 +3,7 @@ services:
     build: 
       context: .
       dockerfile: Dockerfile
-    entrypoint: ["uvicorn", "routers:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "1"]
+    entrypoint: ["uvicorn", "routes:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "1"]
     container_name: backend
     ports:
       - "8000:8000"
