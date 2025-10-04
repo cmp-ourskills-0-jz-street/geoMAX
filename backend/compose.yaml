@@ -1,0 +1,21 @@
+services:
+  backend:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    entrypoint: ["uvicorn", "routers:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "1"]
+    container_name: backend
+    ports:
+      - "8000:8000"
+    deploy:
+      resources:
+        limits:
+          memory: 1G              
+        reservations:
+          memory: 1G
+    networks:
+      - backend-net
+                        
+networks:
+  backend-net:
+    driver: bridge
