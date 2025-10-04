@@ -6,6 +6,7 @@ from domain.entities.label import Label
 from domain.entities.signal_data import Signal, SignalData
 from domain.entities.access_request import AccessRequest
 from core.errors import NotFoundLabelException, DismatchPasswordException
+import uvicorn
 
 app = FastAPI()
 
@@ -15,14 +16,12 @@ interactor = LabelInteractor(repository=repository)
 
 @app.post("/labels/")
 async def create_label(model: Label):
-    await interactor.create(model)
-    return JSONResponse(status_code=status.HTTP_201_CREATED)
+    interactor.create(model)
 
 @app.post("/labels/access")
 async def access_request(model: AccessRequest):
     try:
-        await interactor.access_request(access_request=model)
-        return JSONResponse(status_code=status.HTTP_200_OK)
+        interactor.access_request(access_request=model)
     except NotFoundLabelException:
         raise HTTPException(status_code=404)
     except DismatchPasswordException:
@@ -31,11 +30,13 @@ async def access_request(model: AccessRequest):
 @app.post("/labels/signals")
 async def send_signals(model: SignalData):
     try:
-        await interactor.post_signals(model)
-        return JSONResponse(status_code=status.HTTP_200_OK)
+        interactor.post_signals(model)
     except NotFoundLabelException:
         raise HTTPException(status_code=404)
 
 @app.delete("/labels/{label_id}")
 async def delete(label_id: str):
-    await interactor.delete(label_id=label_id)
+    interactor.delete(label_id=label_id)
+
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=5000, log_level="info")

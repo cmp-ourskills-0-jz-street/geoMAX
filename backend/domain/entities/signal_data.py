@@ -1,7 +1,7 @@
 from pydantic import BaseModel, Field
 
 class Signal(BaseModel):
-    id: str = Field(alias='id')
+    id: str
     rssi: int
 
 class SignalData(BaseModel):
