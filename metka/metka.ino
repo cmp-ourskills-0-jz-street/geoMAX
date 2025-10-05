@@ -17,9 +17,9 @@ std::map<String, int> neighbors;
 
 void setup() {
   Serial.begin(115200);
-  randomSeed(analogRead(0));
+  randomSeed(analogRead(A0));
 
-  long randNum = 44444442;
+  long randNum = random(10000000, 99999999);
   myID = String(randNum);
 
   WiFi.begin(wifiSSID, wifiPassword);
@@ -144,11 +144,11 @@ void update() {
 }
 
 void loop() {
-  delay(random(0, 1000)); 
+  delay(random(0, 100)); 
   esp_now_send(broadcastAddress, (uint8_t *)myID.c_str(), myID.length());
 
   static unsigned long lastUpdate = 0;
-  if (millis() - lastUpdate > 10000) {
+  if (millis() - lastUpdate > 5000) { // можно менять в зависимости от точности устройства.
     update();
     lastUpdate = millis();
   }
