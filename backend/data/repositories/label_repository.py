@@ -17,7 +17,7 @@ class LabelRepository:
         documents = [self.translator.to_document(model) for model in labels]
         return self._manager.insert_dictionaries(documents)
 
-    def get_by_id(self, label_id: int) -> Optional[Label]:
+    def get_by_id(self, label_id: str) -> Optional[Label]:
         raw = self._manager.get_dictionary_by_id(label_id)
         if raw is None:
             return None
@@ -34,7 +34,7 @@ class LabelRepository:
         document = self.translator.to_document(label)
         return self._manager.update_dictionary(document)
 
-    def delete(self, dict_id: int) -> bool:
+    def delete(self, dict_id: str) -> bool:
         return self._manager.delete_dictionary(dict_id)
 
     def count(self) -> int:

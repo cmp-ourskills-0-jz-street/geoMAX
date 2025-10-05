@@ -17,7 +17,7 @@ class DictionaryManager:
                 cursor = conn.cursor()
                 cursor.execute('''
                     CREATE TABLE IF NOT EXISTS dictionaries (
-                        id INTEGER PRIMARY KEY,
+                        id TEXT PRIMARY KEY,
                         own_password TEXT NOT NULL,
                         com_password TEXT NOT NULL,
                         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -63,7 +63,7 @@ class DictionaryManager:
         logger.info(f"Успешно добавлено {success_count} из {total_count} словарей")
         return success_count == total_count
     
-    def get_dictionary_by_id(self, dict_id: int) -> Optional[Dict]:
+    def get_dictionary_by_id(self, dict_id) -> Optional[Dict]:
         try:
             with sqlite3.connect(self.db_path) as conn:
                 cursor = conn.cursor()
@@ -138,7 +138,7 @@ class DictionaryManager:
             logger.error(f"Ошибка при обновлении словаря: {e}")
             return False
     
-    def delete_dictionary(self, dict_id: int) -> bool:
+    def delete_dictionary(self, dict_id) -> bool:
         try:
             with sqlite3.connect(self.db_path) as conn:
                 cursor = conn.cursor()

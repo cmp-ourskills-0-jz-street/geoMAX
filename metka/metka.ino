@@ -5,9 +5,9 @@
 #include <ArduinoJson.h>
 #include <map> 
 
-const char* wifiSSID = "CorporateNet";  
-const char* wifiPassword = "corporate_secret"; 
-const String serverUrl = "http://192.168.1.100:8000";  
+const char* wifiSSID = "corpnet";  
+const char* wifiPassword = "hornet228"; 
+const String serverUrl = "http://10.37.152.60:8000";  
 
 String myID; 
 
@@ -19,7 +19,7 @@ void setup() {
   Serial.begin(115200);
   randomSeed(analogRead(0));
 
-  long randNum = random(10000000, 99999999);
+  long randNum = 44444442;
   myID = String(randNum);
 
   WiFi.begin(wifiSSID, wifiPassword);
@@ -30,8 +30,8 @@ void setup() {
   Serial.println("WiFi connected, IP: " + WiFi.localIP().toString());
 
   WiFi.mode(WIFI_STA);
-  esp_wifi_set_protocol(WIFI_IF_STA, WIFI_PROTOCOL_LR);
-  esp_wifi_config_espnow_rate(WIFI_IF_STA, WIFI_PHY_RATE_1M_L); 
+  //esp_wifi_set_protocol(WIFI_IF_STA, WIFI_PROTOCOL_LR);
+  //esp_wifi_config_espnow_rate(WIFI_IF_STA, WIFI_PHY_RATE_1M_L); 
 
   if (esp_now_init() != ESP_OK) {
     Serial.println("ESP-NOW init failed!");
@@ -67,11 +67,11 @@ void OnDataRecv(const esp_now_recv_info_t *info, const uint8_t *incomingData, in
 
   if (receivedID != myID) {
     if (neighbors.find(receivedID) == neighbors.end()) {
-      if (access(receivedID)) {
+      //if (access(receivedID)) {
         neighbors[receivedID] = rssi;
-      } else {
-        Serial.println("Access denied for " + receivedID);
-      }
+      //} else {
+       // Serial.println("Access denied for " + receivedID);
+      //}
     } else {
       neighbors[receivedID] = rssi;  
     }
@@ -89,6 +89,8 @@ bool create() {
   serializeJson(doc, json);
 
   int httpCode = http.POST(json);
+  //int httpCode = http.GET();
+  Serial.println(httpCode);
   return (httpCode == 200);
 }
 
@@ -105,8 +107,7 @@ bool access(String seenID) {
 
   int httpCode = http.POST(json);
   if (httpCode == 200) {
-    String response = http.getString();
-    return response == "true";
+    return true;
   }
   return false;
 }

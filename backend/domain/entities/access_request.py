@@ -9,7 +9,7 @@ class AccessRequest(BaseModel):
 
     def to_own_label(self) -> Label:
         return Label(
-            _id=self.own_id,
+            id=self.own_id,
             own_password=self.own_password,
             com_password=self.com_password,
         )
